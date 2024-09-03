@@ -1,5 +1,5 @@
-import cv2
 import time
+import cv2
 
 # Defina a captura de vídeo
 cap = cv2.VideoCapture(0)  # 0 é geralmente a câmera padrão
