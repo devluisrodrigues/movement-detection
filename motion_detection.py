@@ -6,14 +6,14 @@ import time
 cap = cv2.VideoCapture(0)  # 0 é geralmente a câmera padrão
 
 # Variáveis para controle de gravação
-is_recording = False
-recording_start_time = 0
-video_writer = None
+IS_RECORDING = False
+RECORDING_START_TIME = 0
+VIDEO_WRITER = None
 
 # Parâmetros para a gravacao
 # Aqui você pode ajustar conforme necessário
-min_contour_area = 15  # Área mínima do contorno para considerar como movimento
-video_duration = 17 # Tempo de video que sera gravado apos dectectar o movimento
+MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento
+VIDEO_DURATION = 17 # Tempo de video que sera gravado apos dectectar o movimento
 
 while True:
     ret, frame = cap.read()
@@ -36,12 +36,12 @@ while True:
     # Encontrar contornos no frame de threshold
     contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    movement_detected = False
+    MOVEMENT_DETECTED = False
 
     # Loop sobre os contornos encontrados
     for contour in contours:
-        if cv2.contourArea(contour) > min_contour_area:
-            movement_detected = True
+        if cv2.contourArea(contour) > MIN_CONTOUR_AREA:
+            MOVEMENT_DETECTED = True
             # break
                         
             # Calcular a caixa delimitadora mínima ao redor do contorno
@@ -49,29 +49,29 @@ while True:
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    if movement_detected:
-        if not is_recording:
+    if MOVEMENT_DETECTED:
+        if not IS_RECORDING:
             # Começar a gravar
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             video_filename = f"movement_{timestamp}.avi"
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            video_writer = cv2.VideoWriter(video_filename, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
-            is_recording = True
-            recording_start_time = time.time()
+            VIDEO_WRITER = cv2.VideoWriter(video_filename, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+            IS_RECORDING = True
+            RECORDING_START_TIME = time.time()
             print(f"Movimento detectado. Gravando vídeo: {video_filename}")
         else:
-            recording_start_time = time.time()
+            RECORDING_START_TIME = time.time()
             # print(f"Movimento detectado enquanto gravava.")
 
 
-    if is_recording:
+    if IS_RECORDING:
         # Gravar o frame no vídeo
-        video_writer.write(frame)
+        VIDEO_WRITER.write(frame)
 
         # Verificar se 15 segundos se passaram
-        if time.time() - recording_start_time > video_duration:
-            is_recording = False
-            video_writer.release()
+        if time.time() - RECORDING_START_TIME > VIDEO_DURATION:
+            IS_RECORDING = False
+            VIDEO_WRITER.release()
             print(f"Gravação concluída: {video_filename}")
 
     # Mostrar o vídeo ao vivo
@@ -85,6 +85,6 @@ while True:
         break
 
 cap.release()
-if video_writer is not None:
-    video_writer.release()
+if VIDEO_WRITER is not None:
+    VIDEO_WRITER.release()
 cv2.destroyAllWindows()
