@@ -41,8 +41,6 @@ while True:
     for contour in contours:
         if cv2.contourArea(contour) > MIN_CONTOUR_AREA:
             movement_detected = True
-            # break
-                        
             # Calcular a caixa delimitadora mínima ao redor do contorno
             (x, y, w, h) = cv2.boundingRect(contour)
 
@@ -54,7 +52,8 @@ while True:
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             video_filename = f"movement_{timestamp}.avi"
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            video_writer = cv2.VideoWriter(video_filename, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+            video_writer = cv2.VideoWriter(
+                video_filename, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
             is_recording = True
             recording_start_time = time.time()
             print(f"Movimento detectado. Gravando vídeo: {video_filename}")
