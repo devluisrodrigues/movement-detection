@@ -1,6 +1,11 @@
 import time
 import cv2
 
+# Parâmetros para a gravação
+# Aqui você pode ajustar conforme necessário
+MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento
+VIDEO_DURATION = 17  # Tempo de vídeo que será gravado após detectar o movimento
+
 # Defina a captura de vídeo
 cap = cv2.VideoCapture(0)  # 0 é geralmente a câmera padrão
 
@@ -8,23 +13,18 @@ cap = cv2.VideoCapture(0)  # 0 é geralmente a câmera padrão
 is_recording = False
 recording_start_time = 0
 video_writer = None
-
-# Parâmetros para a gravacao
-# Aqui você pode ajustar conforme necessário
-MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento
-VIDEO_DURATION = 17 # Tempo de video que sera gravado apos dectectar o movimento
+prev_frame = None
 
 while True:
     ret, frame = cap.read()
     if not ret:
         break
-
     # Converter o frame para escala de cinza
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
     # Inicializar o primeiro frame
-    if 'prev_frame' not in locals():
+    if prev_frame is None:
         prev_frame = gray
         continue
 
@@ -60,7 +60,6 @@ while True:
         else:
             recording_start_time = time.time()
             # print(f"Movimento detectado enquanto gravava.")
-
 
     if is_recording:
         # Gravar o frame no vídeo
