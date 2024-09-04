@@ -1,3 +1,8 @@
+"""
+Este módulo implementa um sistema de detecção de movimento usando OpenCV.
+Quando um movimento é detectado, o sistema grava um vídeo de 17 segundos.
+"""
+
 import time
 import cv2
 
@@ -6,20 +11,55 @@ MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como moviment
 VIDEO_DURATION = 17  # Tempo de vídeo que será gravado após detectar o movimento
 
 def initialize_video_capture():
+    """
+    Inicializa a captura de vídeo da câmera padrão.
+
+    Returns:
+        cv2.VideoCapture: Objeto de captura de vídeo.
+    """
     return cv2.VideoCapture(0)  # 0 é geralmente a câmera padrão
 
 def process_frame(frame):
+    """
+    Converte o frame para escala de cinza e aplica um desfoque gaussiano.
+
+    Args:
+        frame (numpy.ndarray): Frame de vídeo original.
+
+    Returns:
+        numpy.ndarray: Frame processado em escala de cinza e desfocado.
+    """
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
     return gray
 
 def detect_movement(prev_frame, gray_frame):
+    """
+    Detecta movimento comparando o frame atual com o frame anterior.
+
+    Args:
+        prev_frame (numpy.ndarray): Frame anterior em escala de cinza.
+        gray_frame (numpy.ndarray): Frame atual em escala de cinza.
+
+    Returns:
+        list: Lista de contornos detectados.
+    """
     frame_delta = cv2.absdiff(prev_frame, gray_frame)
     thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
     contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 def draw_contours(frame, contours):
+    """
+    Desenha contornos no frame e verifica se há movimento.
+
+    Args:
+        frame (numpy.ndarray): Frame de vídeo original.
+        contours (list): Lista de contornos detectados.
+
+    Returns:
+        bool: True se movimento for detectado, caso contrário False.
+    """
     movement_detected = False
     for contour in contours:
         if cv2.contourArea(contour) > MIN_CONTOUR_AREA:
@@ -29,6 +69,15 @@ def draw_contours(frame, contours):
     return movement_detected
 
 def start_recording(cap):
+    """
+    Inicia a gravação de vídeo.
+
+    Args:
+        cap (cv2.VideoCapture): Objeto de captura de vídeo.
+
+    Returns:
+        tuple: Objeto de gravação de vídeo e nome do arquivo de vídeo.
+    """
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     video_filename = f"movement_{timestamp}.avi"
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -38,6 +87,9 @@ def start_recording(cap):
     return video_writer, video_filename
 
 def main():
+    """
+    Função principal que executa o loop de detecção de movimento e gravação de vídeo.
+    """
     cap = initialize_video_capture()
     is_recording = False
     recording_start_time = 0
