@@ -1,5 +1,7 @@
 # Detecção de Movimento com OpenCV
 
+[Be sure to checkout our wiki!](https://github.com/devluisrodrigues/motion-detection/wiki)
+
 Este projeto implementa um sistema de detecção de movimento usando a biblioteca OpenCV em Python. Quando um movimento é detectado, o sistema grava um vídeo de 17 segundos.
 
 ## Requisitos
