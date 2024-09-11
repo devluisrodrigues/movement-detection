@@ -5,8 +5,12 @@ Este projeto implementa um sistema de detecção de movimento usando a bibliotec
 ## Requisitos
 
 python >= 3.9
+
 opencv-contrib-python==4.10.0.84
+
 opencv-python==4.10.0.84
+
+Consulte o arquivo requirements.txt
 
 ## Instalação
 
