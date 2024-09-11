@@ -6,6 +6,8 @@ Quando um movimento é detectado, o sistema grava um vídeo de 17 segundos.
 import time
 import cv2
 
+from colorama import init, Fore, Style
+
 # Parâmetros para a gravação
 MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento
 VIDEO_DURATION = 17  # Tempo de vídeo que será gravado após detectar o movimento
@@ -83,19 +85,36 @@ def start_recording(cap):
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     video_writer = cv2.VideoWriter(
         video_filename, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
-    print(f"Movimento detectado. Gravando vídeo: {video_filename}")
+    print(Fore.LIGHTYELLOW_EX + f"Movimento detectado. Gravando vídeo: {video_filename}" + Style.RESET_ALL)
     return video_writer, video_filename
 
 def main():
     """
     Função principal que executa o loop de detecção de movimento e gravação de vídeo.
     """
+
+    init(autoreset=True)
+
     cap = initialize_video_capture()
     is_recording = False
     recording_start_time = 0
     video_writer = None
     video_filename = None
     prev_frame = None
+
+    exit_key = input(Fore.CYAN + "Digite a tecla que você deseja usar para sair: " + Style.RESET_ALL)
+    limit_time = input(Fore.CYAN + "Deseja definir um tempo limite para a execução? (s/n): " + Style.RESET_ALL)
+
+    if limit_time == "s":
+        limit_time = int(input(Fore.LIGHTBLUE_EX + "Digite o tempo limite em segundos: " + Style.RESET_ALL))
+        VIDEO_DURATION = limit_time
+        print(Fore.LIGHTBLUE_EX + f"Tempo limite definido: {limit_time} segundos." + Style.RESET_ALL)
+    else:
+        VIDEO_DURATION = 17
+        print(Fore.LIGHTYELLOW_EX + "Tempo limite não definido. O tempo padrão de gravação é de 17 segundos." + Style.RESET_ALL)
+
+    print(Fore.LIGHTMAGENTA_EX + "Inicializando detecção de movimento..." + Style.RESET_ALL)
+    print(Fore.LIGHTMAGENTA_EX + "Pressione a tecla definida para sair." + Style.RESET_ALL)
 
     while True:
         ret, frame = cap.read()
@@ -129,7 +148,7 @@ def main():
         cv2.imshow('Video', frame)
         prev_frame = gray
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord(exit_key):
             break
 
     cap.release()
