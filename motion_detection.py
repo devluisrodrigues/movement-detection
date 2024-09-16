@@ -9,7 +9,7 @@ import cv2
 from colorama import init, Fore, Style
 
 # Parâmetros para a gravação
-MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento
+MIN_CONTOUR_AREA = 15  # Área mínima do contorno para considerar como movimento muito 150 Medio 50 pouco 15
 VIDEO_DURATION = 17  # Tempo de vídeo que será gravado após detectar o movimento
 
 def initialize_video_capture():
@@ -32,6 +32,7 @@ def process_frame(frame):
         numpy.ndarray: Frame processado em escala de cinza e desfocado.
     """
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # se min_contour for pouco desativa, fazer um if
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
     return gray
 
@@ -104,7 +105,24 @@ def main():
 
     exit_key = input(Fore.CYAN + "Digite a tecla que você deseja usar para sair: " + Style.RESET_ALL)
     limit_time = input(Fore.CYAN + "Deseja definir um tempo limite para a execução? (s/n): " + Style.RESET_ALL)
+    flag = True
 
+    while flag:
+        CONTOUR_AREA = input(Fore.CYAN + "Qual seria a sensibilidade que você gostaria?(P/M/G) " + Style.RESET_ALL)
+
+        if CONTOUR_AREA == "P" :
+            MIN_CONTOUR_AREA = 15
+            flag = False
+        elif CONTOUR_AREA == "M" :
+            MIN_CONTOUR_AREA = 50
+            flag = False
+        elif CONTOUR_AREA == "G" :
+            MIN_CONTOUR_AREA = 150
+            flag = False
+        else:
+            print("Precisa ser uma resposta valida, tente novamente")
+
+            
     if limit_time == "s":
         limit_time = int(input(Fore.LIGHTBLUE_EX + "Digite o tempo limite em segundos: " + Style.RESET_ALL))
         VIDEO_DURATION = limit_time
