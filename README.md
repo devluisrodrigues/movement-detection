@@ -6,7 +6,7 @@ Este projeto implementa um sistema de detecção de movimento usando a bibliotec
 
 ## Exemplo de funcionamneto:
 
-Os vídeos abaixo mostram demonstram o funcionamento do programa com pássaros:
+Os vídeos abaixo demonstram o funcionamento do programa com pássaros:
 
 ![](https://github.com/devluisrodrigues/motion-detection/blob/main/videos_exemplo/passaro.gif)
 
