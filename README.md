@@ -4,6 +4,14 @@
 
 Este projeto implementa um sistema de detecção de movimento usando a biblioteca OpenCV em Python. Quando um movimento é detectado, o sistema grava um vídeo de 17 segundos.
 
+## Exemplo de funcionamneto:
+
+Os vídeos abaixo mostram demonstram o funcionamento do programa com pássaros:
+
+![](https://github.com/devluisrodrigues/motion-detection/blob/main/videos_exemplo/passaro.gif)
+
+![](https://github.com/devluisrodrigues/motion-detection/blob/main/videos_exemplo/passaro2.gif)
+
 ## Requisitos
 
 python >= 3.9
